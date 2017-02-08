@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Flask Web Scheduler</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='fullcalendar/fullcalendar.css') }}" />
+  <script src="{{ url_for('static',filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='moment/moment.min.js') }}"></script>
+  <script src="{{url_for('static',filename='fullcalendar/fullcalendar.js')}}"></script>
+  <script>
+  $(document).ready(function() {
+    $("#calendar").fullCalendar({
+
+    })
+  });
+  </script>
+</head>
+<body>
+<div id="calendar"></div>
+</body>
+</html>
