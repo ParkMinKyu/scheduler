@@ -43,6 +43,13 @@ $ . envname/bin/activate
 (envname) $ pip install pymysql
 ```
 
+- mysql info modify in dao/schedulerdao.py
+
+```python
+def getConnection():
+    return pymysql.connect(host='localhost', user='root', password='123456', db='myintranet', charset='utf8')
+```
+
 - run application
 
 ```
