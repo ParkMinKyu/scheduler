@@ -16,10 +16,11 @@ CREATE TABLE `my_schedule` (
 )
 ```
 
-- clone project
+- clone project && move folder
 
 ```
 $ git clone git@github.com:ParkMinKyu/scheduler.git
+$ cd scheduler
 ```
 
 - install [virtualenv](https://virtualenv.pypa.io/en/stable/)
@@ -55,3 +56,5 @@ def getConnection():
 ```
 (envname) $ python application.py
 ```
+
+- [browser accept](http://localhost:5000)
