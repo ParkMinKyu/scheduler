@@ -12,12 +12,29 @@
   <script>
   $(document).ready(function() {
     $("#calendar").fullCalendar({
-
+      events : '{{url_for('scheduler')}}'
     })
+
+    $('#insertBtn').click(function(){
+      $.ajax({
+        url : '{{url_for('scheduler')}}',
+        type : 'post',
+        success : function(res){
+          let data = JSON.parse(res);
+          if(data.rows > 0){
+            $("#calendar").fullCalendar( 'refetchEvents' )
+          }
+          else{
+            alert('실패');
+          }
+        }
+      });
+    });
   });
   </script>
 </head>
 <body>
-<div id="calendar"></div>
+  <button type="button" id="insertBtn">스케줄 등록</button>
+  <div id="calendar"></div>
 </body>
 </html>
