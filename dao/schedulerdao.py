@@ -9,7 +9,7 @@ def getConnection():
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
-def getScheduler():
+def getScheduler(searchDate):
     # MySQL Connection 연결
     conn = getConnection()
 
@@ -17,8 +17,8 @@ def getScheduler():
     curs = conn.cursor(pymysql.cursors.DictCursor)
 
     # SQL문 실행
-    sql = "select id, title, start, end, if(allDay = %s,true,false) allDay from my_schedule"
-    curs.execute(sql, ('Y'))
+    sql = "select id, title, start, end, if(allDay = %s,true,false) allDay from my_schedule where to_days(start) >= to_days(%s) and to_days(end) <= to_days(%s)"
+    curs.execute(sql, ('Y', searchDate['start'], searchDate['end']))
 
     # 데이타 Fetch
     rows = curs.fetchall()
