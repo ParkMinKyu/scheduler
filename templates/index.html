@@ -5,20 +5,61 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Flask Web Scheduler</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='jquery-ui/jquery-ui.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='jquery-ui/jquery-ui.structure.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='jquery-ui/jquery-ui.theme.min.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static',filename='fullcalendar/fullcalendar.css') }}" />
+
   <script src="{{ url_for('static',filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='moment/moment.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='jquery-ui/jquery-ui.min.js') }}"></script>
   <script src="{{ url_for('static',filename='moment/moment.min.js') }}"></script>
   <script src="{{url_for('static',filename='fullcalendar/fullcalendar.js')}}"></script>
   <script>
   $(document).ready(function() {
     $("#calendar").fullCalendar({
-      events : '{{url_for('scheduler')}}'
-    })
+      events : '{{url_for('scheduler')}}',
+      dayClick: function(date, jsEvent, view) {
+       //alert('Clicked on: ' + date.format());
+       //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+       //alert('Current view: ' + view.name);
+
+       // change the day's background color just for fun
+       $('.fc-day').css('background-color','#fff');
+       $(this).css('background-color', 'red');
+     },
+     eventClick : function(event){
+       console.log(event);
+       if(confirm("일정을 삭제 하시겠습니까?")){
+         $.ajax({
+           url : '{{url_for('scheduler')}}',
+           type : 'delete',
+           data :{id:event.id},
+           success : function(res){
+             let data = JSON.parse(res);
+             if(data.rows > 0){
+               $("#calendar").fullCalendar( 'refetchEvents' )
+             }
+             else{
+               alert('실패');
+             }
+           }
+         });
+       }
+     }
+   });
+
+    $('#start, #end').datepicker({
+      dateFormat: "yy-mm-dd"
+    });
+
+    $('#start, #end').datepicker('setDate',new Date());
 
     $('#insertBtn').click(function(){
       $.ajax({
         url : '{{url_for('scheduler')}}',
         type : 'post',
+        data :$('#schedulerForm').serialize(),
         success : function(res){
           let data = JSON.parse(res);
           if(data.rows > 0){
@@ -34,7 +75,14 @@
   </script>
 </head>
 <body>
-  <button type="button" id="insertBtn">스케줄 등록</button>
+  <form name="schedulerForm" id="schedulerForm">
+    start : <input type="text" name="start" id="start" readonly="readonly">
+    end : <input type="text" name="end" id="end" readonly="readonly">
+    title : <input type="text" name="title" id="title">
+    <label for="allDay">하루</label>
+    <input type="checkbox" name="allDay" id="allDay" checked="checked" value="Y">
+    <button type="button" id="insertBtn">스케줄 등록</button>
+  </form>
   <div id="calendar"></div>
 </body>
 </html>

@@ -1,8 +1,14 @@
 ### Flask + fullcalendar Sample
 ----------------------------
-- install python 2.7
-- install mysql
+- install [python 2.7](https://www.python.org/downloads/)
+- install [mysql](https://dev.mysql.com/downloads/)
+- install [python-pip](https://pip.pypa.io/en/stable/installing/)
 - create database
+
+```sql
+CREATE DATABASE mydatabase;
+```
+
 - create table
 
 ```sql
@@ -37,7 +43,7 @@ $ . envname/bin/activate
 (envname) $
 ```
 
-- install flask && pymysql
+- install [flask](http://flask.pocoo.org/) && [pymysql](https://github.com/PyMySQL/PyMySQL)
 
 ```
 (envname) $ pip install flask

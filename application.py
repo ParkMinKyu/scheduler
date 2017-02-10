@@ -10,7 +10,7 @@ def index():
     return render_template("index.html")
 
 # schedule 처리 get/post로 접근가능
-@app.route("/scheduler",methods=["GET","POST"])
+@app.route("/scheduler",methods=["GET","POST","PUT","DELETE"])
 def scheduler():
     # 요청이 get이면
     if request.method == 'GET':
@@ -22,10 +22,20 @@ def scheduler():
 
     #요청이 post면
     if request.method == 'POST':
+        start = request.form['start']
+        end = request.form['end']
+        title = request.form['title']
+        allDay = request.form['allDay']
+
         # Dictoionary 형식의 schedule 변수를 만든다. 추후 parameter를 받게 수정예정
-        schedule = {'title' : 'test', 'contents' : 'contents'}
+        schedule = {'title' : title, 'start' : start, 'end' : end, 'allDay' : allDay}
         # schedule을 입력한다.
         return  schedulerdao.setScheduler(schedule)
+
+    #요청이 delete면
+    if request.method == 'DELETE':
+        id = request.form['id']
+        return  schedulerdao.delScheduler(id)
 
 if __name__ =='__main__':
     app.run(debug=True)
