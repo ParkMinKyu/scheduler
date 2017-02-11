@@ -37,7 +37,13 @@
    });
 
     $('#start, #end').datepicker({
-      dateFormat: "yy-mm-dd"
+      dateFormat: "yy-mm-dd",
+      onSelect : function(dateText, inst){
+        if(this.id == 'start'){
+          $('#start').datepicker("getDate").getTime() > $('#end').datepicker("getDate").getTime();
+          $('#end').datepicker("setDate", dateText);          
+        }
+      }
     });
 
     $('#start, #end').datepicker('setDate',new Date());
@@ -58,7 +64,7 @@
         }
       });
     });
-    
+
     $('#updateBtn').click(function(){
       $.ajax({
         url : '{{url_for('scheduler')}}',
