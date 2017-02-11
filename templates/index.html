@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="{{ url_for('static',filename='jquery-ui/jquery-ui.structure.min.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static',filename='jquery-ui/jquery-ui.theme.min.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static',filename='fullcalendar/fullcalendar.css') }}" />
+  <style>
+  .event_selected {
+    background-color: red;
+  }
+  </style>
 
   <script src="{{ url_for('static',filename='jquery/jquery.min.js') }}"></script>
   <script src="{{ url_for('static',filename='moment/moment.min.js') }}"></script>
@@ -25,14 +30,14 @@
        //alert('Current view: ' + view.name);
 
        // change the day's background color just for fun
-       $('.fc-day').css('background-color','#fff');
-       $(this).css('background-color', 'red');
      },
      eventClick : function(event){
         $('#id').val(event.id);
         $('#title').val(event.title);
         $('#start').val(event.start.toISOString());
         $('#end').val(event.end == null ? event.start.toISOString() : event.end.toISOString() );
+        $('.event_selected').removeClass('event_selected');
+        $(this).addClass('event_selected');
      }
    });
 
@@ -41,7 +46,7 @@
       onSelect : function(dateText, inst){
         if(this.id == 'start'){
           $('#start').datepicker("getDate").getTime() > $('#end').datepicker("getDate").getTime();
-          $('#end').datepicker("setDate", dateText);          
+          $('#end').datepicker("setDate", dateText);
         }
       }
     });
