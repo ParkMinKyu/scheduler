@@ -3,6 +3,7 @@
 import json
 #python mysql 연결 드라이버
 import pymysql
+from werkzeug.datastructures import ImmutableMultiDict
 
 #db연결을 담당할 함스
 def getConnection():
@@ -81,11 +82,12 @@ def putScheduler(schedule):
 
 # parameter 빈값 확인
 def parameter_checker(params):
+    typeName = type(params)
     if not bool(params):
         return False
-    elif type(params) == str or type(params) == unicode and not bool(params.strip()):
+    elif typeName == str or typeName == unicode and not bool(params.strip()):
         return False
-    elif type(params) == dict :
+    elif typeName == dict or typeName == ImmutableMultiDict:
         for key in params.keys() :
             if not parameter_checker(params[key]) :
                 return False
