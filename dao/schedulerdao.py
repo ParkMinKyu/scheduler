@@ -69,6 +69,16 @@ def delScheduler(id):
         params = (id)
         return json.dumps({'rows' : sql_template(3, sql, params)})
 
+#넘어온 schedule id에 해당하는 schedule을 수정
+def putScheduler(schedule):
+    #넘어온 데이터중 빈값이 있으면 0 리턴
+    if not parameter_checker(schedule) :
+        return json.dumps({'rows' : 0})
+    else :
+        sql = "UPDATE my_schedule SET title = %s, start = %s, end = %s, allDay = %s WHERE id = %s"
+        params = (schedule['title'], schedule['start'], schedule['end'], schedule['allDay'], schedule['id'])
+        return json.dumps({'rows' : sql_template(3, sql, params)})
+
 # parameter 빈값 확인
 def parameter_checker(params):
     if not bool(params):

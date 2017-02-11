@@ -29,23 +29,10 @@
        $(this).css('background-color', 'red');
      },
      eventClick : function(event){
-       console.log(event);
-       if(confirm("일정을 삭제 하시겠습니까?")){
-         $.ajax({
-           url : '{{url_for('scheduler')}}',
-           type : 'delete',
-           data :{id:event.id},
-           success : function(res){
-             let data = JSON.parse(res);
-             if(data.rows > 0){
-               $("#calendar").fullCalendar( 'refetchEvents' )
-             }
-             else{
-               alert('실패');
-             }
-           }
-         });
-       }
+        $('#id').val(event.id);
+        $('#title').val(event.title);
+        $('#start').val(event.start.toISOString());
+        $('#end').val(event.end == null ? event.start.toISOString() : event.end.toISOString() );
      }
    });
 
@@ -71,6 +58,42 @@
         }
       });
     });
+    
+    $('#updateBtn').click(function(){
+      $.ajax({
+        url : '{{url_for('scheduler')}}',
+        type : 'put',
+        data :$('#schedulerForm').serialize(),
+        success : function(res){
+          let data = JSON.parse(res);
+          if(data.rows > 0){
+            $("#calendar").fullCalendar( 'refetchEvents' )
+          }
+          else{
+            alert('실패');
+          }
+        }
+      });
+    });
+
+    $('#deleteBtn').click(function(){
+      if(confirm($('#title').val() + " 일정을 삭제 하시겠습니까?")){
+        $.ajax({
+          url : '{{url_for('scheduler')}}',
+          type : 'delete',
+          data :{id:$('#id').val()},
+          success : function(res){
+            let data = JSON.parse(res);
+            if(data.rows > 0){
+              $("#calendar").fullCalendar( 'refetchEvents' )
+            }
+            else{
+              alert('실패');
+            }
+          }
+        });
+      }
+    });
   });
   </script>
 </head>
@@ -79,9 +102,12 @@
     start : <input type="text" name="start" id="start" readonly="readonly">
     end : <input type="text" name="end" id="end" readonly="readonly">
     title : <input type="text" name="title" id="title">
+    <input type="hidden" name="id" id="id">
     <label for="allDay">하루</label>
     <input type="checkbox" name="allDay" id="allDay" checked="checked" value="Y">
     <button type="button" id="insertBtn">스케줄 등록</button>
+    <button type="button" id="updateBtn">스케줄 수정</button>
+    <button type="button" id="deleteBtn">스케줄 삭제</button>
   </form>
   <div id="calendar"></div>
 </body>

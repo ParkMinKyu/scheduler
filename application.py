@@ -37,5 +37,10 @@ def scheduler():
         id = request.form['id']
         return  schedulerdao.delScheduler(id)
 
+    #요청이 put이면
+    if request.method == 'PUT':
+        schedule = request.form
+        return schedulerdao.putScheduler(schedule)
+
 if __name__ =='__main__':
     app.run(debug=True)
