@@ -24,14 +24,7 @@
   $(document).ready(function() {
     $("#calendar").fullCalendar({
       events : '{{url_for('scheduler')}}',
-      dayClick: function(date, jsEvent, view) {
-       //alert('Clicked on: ' + date.format());
-       //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-       //alert('Current view: ' + view.name);
-
-       // change the day's background color just for fun
-     },
-     eventClick : function(event){
+      eventClick : function(event){
         $('#id').val(event.id);
         $('#title').val(event.title);
         $('#start').val(event.start.toISOString());
