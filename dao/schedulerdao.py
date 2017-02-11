@@ -82,11 +82,15 @@ def putScheduler(schedule):
 
 # parameter 빈값 확인
 def parameter_checker(params):
+    #parameter type check
     typeName = type(params)
+    #0이거나 공백일경우 false
     if not bool(params):
         return False
+    #str 이나 unicode일경우 trim 된 문자열이 공백인지 확인
     elif typeName == str or typeName == unicode and not bool(params.strip()):
         return False
+    # Dictoionary나 ImmutableMultiDict형일경우 변수 순환하며 체크
     elif typeName == dict or typeName == ImmutableMultiDict:
         for key in params.keys() :
             if not parameter_checker(params[key]) :
