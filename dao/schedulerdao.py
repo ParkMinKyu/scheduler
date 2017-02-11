@@ -42,6 +42,8 @@ def sql_template(type, sql, params=None):
 
 #등록된 schedule을 가져옴
 def getScheduler(searchDate):
+    if not parameter_checker(searchDate) :
+        return json.dumps({})
     sql = "select id, title, start, end, if(allDay = %s,true,false) allDay from my_schedule where to_days(start) >= to_days(%s) and to_days(end) <= to_days(%s)"
     params = ('Y', searchDate['start'], searchDate['end'])
     #처리된 데이터를 json으로 변경 datetime처리를 위해 date_handler지정
@@ -50,7 +52,7 @@ def getScheduler(searchDate):
 #넘어온 schedule을 등록
 def setScheduler(schedule):
     #넘어온 데이터중 빈값이 있으면 0 리턴
-    if not bool(schedule['start'].strip()) or not bool(schedule['end'].strip()) or not bool(schedule['title'].strip()) or not bool(schedule['allDay'].strip()) :
+    if not parameter_checker(schedule) :
         return json.dumps({'rows' : 0})
     else :
         sql = "INSERT INTO my_schedule(title, start, end, allDay) VALUES (%s, %s, %s, %s)"
@@ -60,9 +62,23 @@ def setScheduler(schedule):
 # schedule 삭제
 def delScheduler(id):
     #넘어온 데이터중 빈값이 있으면 0 리턴
-    if not bool(id.strip()) :
+    if not parameter_checker(id) :
         return json.dumps({'rows' : 0})
     else :
         sql = "DELETE FROM my_schedule WHERE id = %s"
         params = (id)
         return json.dumps({'rows' : sql_template(3, sql, params)})
+
+# parameter 빈값 확인
+def parameter_checker(params):
+    if not bool(params):
+        return False
+    elif type(params) == str or type(params) == unicode and not bool(params.strip()):
+        return False
+    elif type(params) == dict :
+        for key in params.keys() :
+            if not parameter_checker(params[key]) :
+                return False
+        return True
+    else:
+        return True
