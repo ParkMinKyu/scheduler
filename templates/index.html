@@ -24,6 +24,11 @@
   $(document).ready(function() {
     $("#calendar").fullCalendar({
       events : '{{url_for('scheduler')}}',
+      dayClick : function(date){
+          $('#start, #end').datepicker('setDate',date._d);
+          $('.event_selected').removeClass('event_selected');
+          $(this).addClass('event_selected');
+      },
       eventClick : function(event){
         $('#id').val(event.id);
         $('#title').val(event.title);
